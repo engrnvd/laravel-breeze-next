@@ -1,0 +1,20 @@
+{
+  "name": "naveed/breeze-next",
+  "description": "NextJs integration with Laravel Breeze",
+  "type": "library",
+  "require": {
+    "laravel/laravel": ">=8",
+    "php": ">=8.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Naveed\\BreezeNext\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Naveed Hassan",
+      "email": "08es34@gmail.com"
+    }
+  ]
+}
