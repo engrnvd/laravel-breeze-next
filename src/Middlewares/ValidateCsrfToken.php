@@ -1,6 +1,6 @@
 <?php
 
-namespace Naveed\BreezeNext;
+namespace Naveed\BreezeNext\Middlewares;
 
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 
