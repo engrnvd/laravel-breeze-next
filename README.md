@@ -1,1 +1,3 @@
-# laravel-breeze-next
+# NextJs integration with Laravel Breeze
+
+
