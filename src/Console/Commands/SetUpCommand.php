@@ -37,6 +37,8 @@ class SetUpCommand extends Command
 
         $this->updateAuthRoutes();
 
+        $this->warn("Please make sure that your User model uses Laravel\Sanctum\HasApiTokens trait.");
+
         return 0;
     }
 
