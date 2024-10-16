@@ -8,6 +8,6 @@ class ValidateCsrfToken extends VerifyCsrfToken
 {
     protected function tokensMatch($request): bool
     {
-        return parent::tokensMatch($request) || $request->header('X-CSRF-KEY') === env('CSRF_KEY');
+        return $request->header('X-CSRF-KEY') === env('BREEZE_NEXT_CSRF_KEY') || parent::tokensMatch($request);
     }
 }

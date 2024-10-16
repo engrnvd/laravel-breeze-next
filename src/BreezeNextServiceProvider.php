@@ -24,14 +24,12 @@ class BreezeNextServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (app()->runningInConsole()) {
-            $this->publishes([
-                __DIR__ . '/Controllers/Auth' => app_path('Http/Controllers/Auth'),
-            ]);
+        $this->publishes([
+            __DIR__ . '/Controllers/Auth' => app_path('Http/Controllers/Auth'),
+        ], 'breeze-next');
 
-            $this->commands([
-                SetUpCommand::class,
-            ]);
-        }
+        $this->commands([
+            SetUpCommand::class,
+        ]);
     }
 }
