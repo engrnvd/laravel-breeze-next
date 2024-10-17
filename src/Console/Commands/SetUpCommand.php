@@ -28,7 +28,7 @@ class SetUpCommand extends Command
      *
      * @return int
      */
-    public function handle(): int
+    public function handle()
     {
         $this->info("Updating controllers...");
         \Artisan::call('vendor:publish', ['--tag' => 'breeze-next', '--force' => true]);
@@ -37,14 +37,26 @@ class SetUpCommand extends Command
 
         $this->updateAuthRoutes();
 
+        $this->updateAuthMiddleware();
+
         $this->warn("Please make sure that your User model uses Laravel\Sanctum\HasApiTokens trait.");
 
         return 0;
     }
 
+    private function updateAuthMiddleware(): void
+    {
+        $file = base_path('routes/auth.php');
+        $this->info("Updating middleware in {$file} from auth to auth:sanctum...");
+        $content = file_get_contents($file);
+        $regex = '/(middleware\(.*)\'auth\'(.*\))/';
+        $newContent = preg_replace($regex, "$1'auth:sanctum'$2", $content);
+        file_put_contents($file, $newContent);
+    }
+
     private function updateAuthRoutes(): void
     {
-        $this->info("Updating auth routes...");
+        $this->info("Moving auth routes from routes/web.php to routes/api.php...");
         $file = base_path('routes/web.php');
         $content = file_get_contents($file);
         $regex = '/require\s+__DIR__\s*\.\s*\'\/auth\.php\';/';
@@ -71,7 +83,7 @@ class SetUpCommand extends Command
         $envFile = base_path('.env');
         $content = file_get_contents($envFile);
         if (Str::of($content)->contains('BREEZE_NEXT_CSRF_KEY=')) {
-            $this->warn("BREEZE_NEXT_CSRF_KEY already set in .env file. Please make sure to add the same key in the .env file of your NextJs application.");
+            $this->warn("BREEZE_NEXT_CSRF_KEY already set in .env file. Please make sure that the same key exists in the .env file of your NextJs application.");
             return;
         }
         $line = "BREEZE_NEXT_CSRF_KEY=" . Str::random(32);
