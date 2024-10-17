@@ -39,9 +39,22 @@ class SetUpCommand extends Command
 
         $this->updateAuthMiddleware();
 
+        $this->updateEmailVerificationRequest();
+
         $this->warn("Please make sure that your User model uses Laravel\Sanctum\HasApiTokens trait.");
 
         return 0;
+    }
+
+    private function updateEmailVerificationRequest(): void
+    {
+        $str = 'use Illuminate\Foundation\Auth\EmailVerificationRequest;';
+        $replacement = 'use Naveed\BreezeNext\Requests\EmailVerificationRequest;';
+        $this->info("Updating email verification request from {$str} to {$replacement}...");
+        $file = app_path("Http/Controllers/Auth/VerifyEmailController.php");
+        $contents = file_get_contents($file);
+        $contents = str_replace($str, $replacement, $contents);
+        file_put_contents($file, $contents);
     }
 
     private function updateAuthMiddleware(): void
@@ -51,6 +64,9 @@ class SetUpCommand extends Command
         $content = file_get_contents($file);
         $regex = '/(middleware\(.*)\'auth\'(.*\))/';
         $newContent = preg_replace($regex, "$1'auth:sanctum'$2", $content);
+        // remove auth from email verification link
+        $regex = '/middleware\(.+auth:sanctum.+signed.+throttle:6,1.+\)/';
+        $newContent = preg_replace($regex, "middleware(['signed', 'throttle:6,1'])", $newContent);
         file_put_contents($file, $newContent);
     }
 
