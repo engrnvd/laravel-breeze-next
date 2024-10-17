@@ -25,5 +25,12 @@
       "name": "Naveed ul Hassan Malik",
       "email": "08es34@gmail.com"
     }
-  ]
+  ],
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Naveed\\BreezeNext\\BreezeNextServiceProvider"
+      ]
+    }
+  }
 }
